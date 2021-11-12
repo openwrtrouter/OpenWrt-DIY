@@ -98,6 +98,8 @@ jobs:
         [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
         cat config/Qualcomm/Qualcomm-extra2.config >> openwrt/.config
         chmod +x $DIY_P2_SH
+        echo '.config info'
+        cat openwrt/.config
         cd openwrt
         $GITHUB_WORKSPACE/$DIY_P2_SH
         cd $GITHUB_WORKSPACE/openwrt
@@ -106,8 +108,7 @@ jobs:
         echo "FILE_DATE=_$(date +"%Y%m%d%H%M")" >> $GITHUB_ENV
         grep 'DISTRIB_REVISION=' package/lean/default-settings/files/zzz-default-settings  | awk -v head="DISTRIB_REVISION='" -v tail="'\"" '{print substr($0, index($0,head)+length(head),index($0,tail)-index($0,head)-length(head))}' >DISTRIB_REVISION
         [ -s DISTRIB_REVISION ] && echo "DISTRIB_REVISION= $(cat DISTRIB_REVISION)" >> $GITHUB_ENV
-        
-          
+
     - name: Clone staging_dir
       working-directory: /workdir
       if: github.event.inputs.staging_dir == '1' || github.event.inputs.staging_dir  == '2' || github.event.inputs.staging_dir  == '3'
